@@ -1,5 +1,5 @@
 <?php
-require "functions.php";
+require __DIR__ . "/includes/functions.php";
 requireLogin();
 $userId = getCurrentUserId();
 $errorText = "";
@@ -55,7 +55,7 @@ $projectsList = runQuery(
 
 // 3. Show the page
 $pageTitle = "Projects";
-require "header.php";
+require __DIR__ . "/includes/header.php";
 ?>
 <h1>Projects</h1>
 
@@ -92,4 +92,4 @@ require "header.php";
     </a>
   <?php } ?>
 </div>
-<?php require "footer.php"; ?>
+<?php require __DIR__ . "/includes/footer.php"; ?>

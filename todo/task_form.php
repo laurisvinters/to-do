@@ -1,5 +1,5 @@
 <?php
-require "functions.php";
+require __DIR__ . "/includes/functions.php";
 requireLogin();
 $userId = getCurrentUserId();
 $errorsList = [];
@@ -50,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 [$formValues["title"], $formValues["description"], $formValues["due_date"], $formValues["priority"], $userId, $projectId, $assignedUserId]
             );
         }
-        $defaultPage = $projectId === null ? "dashboard.php" : "project.php?id=" . $projectId;
+        $defaultPage = $projectId === null ? "/dashboard.php" : "/project.php?id=" . $projectId;
         redirectTo(safeReturnPage($defaultPage));
     }
     $task = array_merge($task, $formValues, ["assigned_user_id" => $assignedUserId]);
@@ -58,7 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 // 3. Show the page
 $pageTitle = $taskId > 0 ? "Edit task" : "New task";
-require "header.php";
+require __DIR__ . "/includes/header.php";
 ?>
 <form class="form-page card" method="post">
   <h1><?= escape($pageTitle) ?></h1>
@@ -86,6 +86,6 @@ require "header.php";
     </select>
   <?php } ?>
   <button type="submit">Save task</button>
-  <p><a href="<?= escape(safeReturnPage($projectId === null ? "dashboard.php" : "project.php?id=" . (int) $projectId)) ?>">Cancel</a></p>
+  <p><a href="<?= escape(safeReturnPage($projectId === null ? "/dashboard.php" : "/project.php?id=" . (int) $projectId)) ?>">Cancel</a></p>
 </form>
-<?php require "footer.php"; ?>
+<?php require __DIR__ . "/includes/footer.php"; ?>

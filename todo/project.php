@@ -1,5 +1,5 @@
 <?php
-require "functions.php";
+require __DIR__ . "/includes/functions.php";
 requireLogin();
 $userId = getCurrentUserId();
 $messageText = "";
@@ -74,7 +74,7 @@ $tasksList = runQuery(
 
 // 4. Show the page
 $pageTitle = $project["name"];
-require "header.php";
+require __DIR__ . "/includes/header.php";
 ?>
 <h1><?= escape($project["name"]) ?></h1>
 <p><a href="projects.php">← All projects</a></p>
@@ -108,4 +108,4 @@ require "header.php";
     <button class="light-button">Delete project</button>
   </form>
 <?php } ?>
-<?php require "footer.php"; ?>
+<?php require __DIR__ . "/includes/footer.php"; ?>

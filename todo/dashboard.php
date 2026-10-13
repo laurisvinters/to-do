@@ -1,5 +1,5 @@
 <?php
-require "functions.php";
+require __DIR__ . "/includes/functions.php";
 requireLogin();
 $userId = getCurrentUserId();
 
@@ -37,7 +37,7 @@ $tasksList = runQuery(
 
 // 3. Show the page
 $pageTitle = "Dashboard";
-require "header.php";
+require __DIR__ . "/includes/header.php";
 ?>
 <h1>Dashboard</h1>
 <div class="statistics-row">
@@ -57,4 +57,4 @@ require "header.php";
 </p>
 
 <div class="card"><?php showTasksTable($tasksList); ?></div>
-<?php require "footer.php"; ?>
+<?php require __DIR__ . "/includes/footer.php"; ?>

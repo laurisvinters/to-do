@@ -8,7 +8,7 @@ function getDatabase()
 {
     static $database = null;
     if ($database === null) {
-        $database = new PDO("sqlite:" . __DIR__ . "/planner.sqlite");
+        $database = new PDO("sqlite:" . dirname(__DIR__) . "/planner.sqlite");
         $database->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $database->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
         $database->exec("PRAGMA foreign_keys = ON");
@@ -86,7 +86,7 @@ function safeReturnPage($defaultPage)
 {
     $target = $_POST["redirect"] ?? $_GET["redirect"] ?? "";
     if (preg_match('~^/?(dashboard|project|projects)\.php(\?[a-zA-Z0-9_=&%:-]*)?$~', $target)) {
-        return $target;
+        return "/" . ltrim($target, "/");
     }
     return $defaultPage;
 }
@@ -99,7 +99,7 @@ function getCurrentUserId()
 function requireLogin()
 {
     if (getCurrentUserId() === null) {
-        redirectTo("login.php");
+        redirectTo("/login.php");
     }
 }
 
@@ -211,7 +211,7 @@ function readTaskForm()
 function showTaskButton($task, $actionName, $buttonText, $buttonClass, $needsConfirm = false)
 {
     $confirmText = $needsConfirm ? ' onsubmit="return confirm(\'Are you sure?\')"' : "";
-    echo '<form method="post" action="task_action.php" style="display:inline"' . $confirmText . '>'
+    echo '<form method="post" action="actions/task_action.php" style="display:inline"' . $confirmText . '>'
         . csrfField()
         . '<input type="hidden" name="redirect" value="' . escape($_SERVER["REQUEST_URI"] ?? "") . '">'
         . '<input type="hidden" name="task_id" value="' . (int) $task["id"] . '">'

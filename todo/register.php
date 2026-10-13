@@ -1,5 +1,5 @@
 <?php
-require "functions.php";
+require __DIR__ . "/includes/functions.php";
 if (getCurrentUserId() !== null) {
     redirectTo("dashboard.php");
 }
@@ -47,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 // 2. Show the page
 $pageTitle = "Create account";
-require "header.php";
+require __DIR__ . "/includes/header.php";
 ?>
 <form class="form-page card" method="post">
   <h1>Create your account</h1>
@@ -62,4 +62,4 @@ require "header.php";
   <button type="submit">Create account</button>
   <p>Already have an account? <a href="login.php">Log in</a></p>
 </form>
-<?php require "footer.php"; ?>
+<?php require __DIR__ . "/includes/footer.php"; ?>

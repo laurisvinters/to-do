@@ -1,10 +1,10 @@
 <?php
-require "functions.php";
+require dirname(__DIR__) . "/includes/functions.php";
 requireLogin();
 $userId = getCurrentUserId();
 
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
-    redirectTo("dashboard.php");
+    redirectTo("/dashboard.php");
 }
 checkCsrf();
 
@@ -25,5 +25,5 @@ if ($actionName === "toggle" && canChangeTask($task, $userId)) {
 }
 
 // 3. Go back to the page the button was clicked on
-$defaultPage = $task["project_id"] === null ? "dashboard.php" : "project.php?id=" . (int) $task["project_id"];
+$defaultPage = $task["project_id"] === null ? "/dashboard.php" : "/project.php?id=" . (int) $task["project_id"];
 redirectTo(safeReturnPage($defaultPage));
