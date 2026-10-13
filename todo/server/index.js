@@ -1,6 +1,8 @@
 import express from "express";
 import { DatabaseSync } from "node:sqlite";
 import crypto from "node:crypto";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 function hashPassword(password) {
     const salt = crypto.randomBytes(16).toString("hex");
@@ -8,7 +10,7 @@ function hashPassword(password) {
     return `${salt}:${hash}`;
 }
 
-function verifyPassword(password, store) {
+function verifyPassword(password, stored) {
     const [salt, storedHash] = stored.split(":");
     const candidate = crypto.scryptSync(password, salt, 64);
     return crypto.timingSafeEqual(candidate, Buffer.from(storedHash, "hex"));
@@ -18,11 +20,15 @@ function verifyPassword(password, store) {
 export function createApp(dbPath = "todo.sqlite") {
     const db = new DatabaseSync(dbPath);
     db.exec(`
-        PRAGMA foreign_keys ON; 
+        PRAGMA foreign_keys = ON;
         CREATE TABLE IF NOT EXISTS tasks (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            text TEXT NOT NULL,
-            done INTEGER NOT NULL DEFAULT 0
+            id INTEGER PRIMARY KEY,
+            title TEXT NOT NULL,
+            due_date TEXT,
+            priority TEXT NOT NULL DEFAULT 'Medium',
+            completed INTEGER NOT NULL DEFAULT 0,
+            category TEXT NOT NULL DEFAULT 'Personal',
+            owner_id INTEGER NOT NULL
         );
         CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -63,4 +69,9 @@ export function createApp(dbPath = "todo.sqlite") {
         res.json({ tasks: db.prepare("SELECT * FROM tasks").all()});
     });
     return {app, db}; 
+}
+
+if (fileURLToPath(import.meta.url) === path.resolve(process.argv[1])) {
+    const { app } = createApp();
+    app.listen(3001, () => console.log("API on http://localhost:3001"));
 }
