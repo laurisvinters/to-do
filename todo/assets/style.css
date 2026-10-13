@@ -32,7 +32,11 @@ a { color: var(--main-color); }
 .statistic-completed { background: var(--main-color); color: white; }
 button, .button { display: inline-block; margin: 2px 0; padding: 8px 14px; border: none; border-radius: 8px; background: var(--main-color); color: white; cursor: pointer; text-decoration: none; font-size: 14px; }
 .light-button { background: var(--page-background-color); color: var(--text-color); border: 1px solid var(--border-color); }
-input, select, textarea { padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; font-family: inherit; }
+input, select, textarea { margin: 2px 0; padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; font-family: inherit; }
+.card h3 { margin-top: 0; }
+.card form + form { margin-top: 12px; }
+.rename-form { display: flex; gap: 8px; margin-bottom: 18px; }
+.rename-form input { flex: 1; font-size: 20px; font-weight: bold; }
 progress { width: 100%; accent-color: var(--main-color); }
 .error-message { color: var(--error-color); }
 .success-message { color: var(--success-color); }

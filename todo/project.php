@@ -31,6 +31,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         redirectTo("projects.php");
     }
 
+    if ($actionName === "rename") {
+        $projectName = trim($_POST["name"] ?? "");
+        if (mb_strlen($projectName) < 2 || mb_strlen($projectName) > 60) {
+            $errorText = "Project name must have 2 to 60 characters.";
+        } else {
+            runQuery("UPDATE projects SET name = ? WHERE id = ?", [$projectName, $projectId]);
+            redirectTo("project.php?id=" . $projectId);
+        }
+    }
+
     if ($actionName === "invite") {
         $emailText = strtolower(trim($_POST["email"] ?? ""));
         $invitedUser = runQuery("SELECT id FROM users WHERE email = ?", [$emailText])->fetch();
@@ -61,7 +71,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 // 3. Load members and tasks
 $memberStatusFilter = $isOwner ? "" : " AND project_members.status = 'accepted'";
 $membersList = runQuery(
-    "SELECT users.name, project_members.status FROM project_members
+    "SELECT users.id, users.name, project_members.status FROM project_members
      JOIN users ON users.id = project_members.user_id
      WHERE project_members.project_id = ?" . $memberStatusFilter . " ORDER BY users.name",
     [$projectId]
@@ -76,19 +86,29 @@ $tasksList = runQuery(
 $pageTitle = $project["name"];
 require __DIR__ . "/includes/header.php";
 ?>
-<h1><?= escape($project["name"]) ?></h1>
+<?php if ($isOwner) { ?>
+  <form method="post" class="rename-form">
+    <?= csrfField() ?>
+    <input type="hidden" name="action" value="rename">
+    <input type="text" name="name" value="<?= escape($project["name"]) ?>" required maxlength="60" aria-label="Project name">
+    <button type="submit">Rename</button>
+  </form>
+  <?php if ($errorText !== "" && ($_POST["action"] ?? "") === "rename") { ?><p class="error-message"><?= escape($errorText) ?></p><?php } ?>
+<?php } else { ?>
+  <h1><?= escape($project["name"]) ?></h1>
+<?php } ?>
 <p><a href="projects.php">← All projects</a></p>
 
 <div class="card">
   <h3>Members</h3>
   <ul>
     <?php foreach ($membersList as $member) { ?>
-      <li><?= escape($member["name"]) ?> (<?= escape($member["status"]) ?>)</li>
+      <li><?= escape($member["name"]) ?> (<?= $member["id"] == $project["owner_id"] ? "owner" : escape($member["status"]) ?>)</li>
     <?php } ?>
   </ul>
   <?php if ($isOwner) { ?>
     <form method="post">
-      <?php if ($errorText !== "") { ?><p class="error-message"><?= escape($errorText) ?></p><?php } ?>
+      <?php if ($errorText !== "" && ($_POST["action"] ?? "") === "invite") { ?><p class="error-message"><?= escape($errorText) ?></p><?php } ?>
       <?php if ($messageText !== "") { ?><p class="success-message"><?= escape($messageText) ?></p><?php } ?>
       <?= csrfField() ?>
       <input type="hidden" name="action" value="invite">
