@@ -1,0 +1,64 @@
+/* ===== 1. Variables (color names only) ===== */
+:root {
+  --main-color: slateblue;
+  --accent-color: greenyellow;
+  --page-background-color: ghostwhite;
+  --card-color: white;
+  --text-color: midnightblue;
+  --muted-text-color: gray;
+  --border-color: gainsboro;
+  --error-color: crimson;
+  --success-color: seagreen;
+}
+
+/* ===== 2. Base ===== */
+* { box-sizing: border-box; }
+body { margin: 0; display: flex; min-height: 100vh; font-family: Arial, sans-serif; color: var(--text-color); background: var(--page-background-color); }
+main { flex: 1; padding: 30px; min-width: 0; }
+h1 { margin-top: 0; }
+a { color: var(--main-color); }
+
+/* ===== 3. Sidebar ===== */
+#sidebar { width: 200px; padding: 20px; background: var(--card-color); }
+#sidebar .logo { margin-bottom: 30px; font-weight: bold; font-size: 20px; }
+#sidebar a { display: block; margin-bottom: 5px; padding: 10px; border-radius: 8px; text-decoration: none; }
+
+/* ===== 4. Cards, buttons, forms ===== */
+.card { display: block; padding: 20px; border-radius: 12px; background: var(--card-color); color: var(--text-color); text-decoration: none; }
+.statistics-row { display: flex; gap: 15px; margin: 20px 0; }
+.statistic-card { flex: 1; padding: 20px; border-radius: 12px; background: var(--card-color); }
+.statistic-card strong { display: block; font-size: 32px; }
+.statistic-total { background: var(--accent-color); }
+.statistic-completed { background: var(--main-color); color: white; }
+button, .button { display: inline-block; margin: 2px 0; padding: 8px 14px; border: none; border-radius: 8px; background: var(--main-color); color: white; cursor: pointer; text-decoration: none; font-size: 14px; }
+.light-button { background: var(--page-background-color); color: var(--text-color); border: 1px solid var(--border-color); }
+input, select, textarea { padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; font-family: inherit; }
+progress { width: 100%; accent-color: var(--main-color); }
+.error-message { color: var(--error-color); }
+.success-message { color: var(--success-color); }
+
+/* ===== 5. Tasks table ===== */
+.table-wrapper { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; }
+th { text-align: left; font-size: 12px; color: var(--muted-text-color); }
+th, td { padding: 10px 8px; border-bottom: 1px solid var(--border-color); vertical-align: top; }
+.completed-task { text-decoration: line-through; color: var(--muted-text-color); }
+.priority-High { color: crimson; }
+.priority-Medium { color: royalblue; }
+.priority-Low { color: olive; }
+
+/* ===== 6. Projects ===== */
+.cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+
+/* ===== 7. Login, register, task form ===== */
+.form-page { margin: 20px auto; width: 100%; max-width: 380px; }
+.form-page input, .form-page select, .form-page textarea { display: block; width: 100%; margin-bottom: 15px; }
+.form-page button { width: 100%; }
+
+/* ===== 8. Small screens ===== */
+@media (max-width: 700px) {
+  body { flex-direction: column; }
+  #sidebar { width: 100%; }
+  .cards-grid { grid-template-columns: 1fr; }
+  .statistics-row { flex-direction: column; }
+}
